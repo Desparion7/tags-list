@@ -2,3 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+.custom-select {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	padding: 5px 30px 5px 10px;
+	font-size: 16px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.707 13.293a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L10 11.586l-3.293-3.293a1 1 0 1 0-1.414 1.414l4 4z"/></svg>');
+	background-repeat: no-repeat;
+	background-position: right 10px center;
+	background-size: 16px;
+	cursor: pointer;
+	margin-left: 0.5rem;
+}
+
+.custom-select:focus {
+	outline: none;
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}

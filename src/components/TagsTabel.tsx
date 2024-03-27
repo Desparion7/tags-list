@@ -3,71 +3,57 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TablePagination from '@mui/material/TablePagination';
-import TableFooter from '@mui/material/TableFooter';
 import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import Paper from '@mui/material/Paper';
 import { TagType } from '../types/tagType';
-import { TablePaginationActions } from './TablePaginationActions';
+import { usePaginationTags } from '../context/state';
 import TagsTableControls from './TagsTableControls';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 
-export default function TagsTable({ items }: { items: TagType[] }) {
-	const [page, setPage] = React.useState(0);
-	const [rowsPerPage, setRowsPerPage] = React.useState(5);
-	const [sortOption, setSortOption] = React.useState<
-		'name' | 'count' | 'name_desc' | 'count_desc'
-	>('name');
+type TagsTabelPropsType = {
+	items: TagType[];
+	total: number;
+};
 
-	const handleSortChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-		const newSortOption = event.target.value as
-			| 'name'
-			| 'count'
-			| 'name_desc'
-			| 'count_desc';
-		setSortOption(newSortOption);
-	};
-
-	// Avoid a layout jump when reaching the last page with empty rows.
-	const emptyRows =
-		page > 0 ? Math.max(0, (1 + page) * rowsPerPage - items.length) : 0;
-
-	const handleChangePage = (
-		_event: React.MouseEvent<HTMLButtonElement> | null,
-		newPage: number
-	) => {
-		setPage(newPage);
-	};
+export default function TagsTable({ items, total }: TagsTabelPropsType) {
+	const {
+		page,
+		rowsPerPage,
+		orderOption,
+		setOrderOption,
+		sortOption,
+		setSortOption,
+		setPage,
+		setRowsPerPage,
+	} = usePaginationTags();
 
 	const handleChangeRowsPerPage = (
 		event: React.ChangeEvent<{ value: unknown }>
 	) => {
 		setRowsPerPage(parseInt(event.target.value as string, 10));
-		setPage(0);
 	};
-
-	const sortedItems = React.useMemo(() => {
-		switch (sortOption) {
-			case 'name':
-				return [...items].sort((a, b) => a.name.localeCompare(b.name));
-			case 'name_desc':
-				return [...items].sort((a, b) => b.name.localeCompare(a.name));
-			case 'count':
-				return [...items].sort((a, b) => a.count - b.count);
-			case 'count_desc':
-				return [...items].sort((a, b) => b.count - a.count);
-			default:
-				return items;
-		}
-	}, [items, sortOption]);
+	const handleChangeOrderOption = (
+		event: React.ChangeEvent<{ value: unknown }>
+	) => {
+		setOrderOption(event.target.value as 'desc' | 'asc');
+	};
+	const handleChangeSortOption = (
+		event: React.ChangeEvent<{ value: unknown }>
+	) => {
+		setSortOption(event.target.value as 'popular' | 'activity' | 'name');
+	};
 
 	return (
 		<>
 			<TagsTableControls
 				rowsPerPage={rowsPerPage}
 				handleChangeRowsPerPage={handleChangeRowsPerPage}
+				orderOption={orderOption}
+				handleChangeOrderOption={handleChangeOrderOption}
 				sortOption={sortOption}
-				handleSortChange={handleSortChange}
+				handleChangeSortOption={handleChangeSortOption}
 			/>
 			<TableContainer component={Paper}>
 				<Table
@@ -102,14 +88,7 @@ export default function TagsTable({ items }: { items: TagType[] }) {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{(rowsPerPage > 0
-							? sortedItems.slice(
-									page * rowsPerPage,
-									page * rowsPerPage + rowsPerPage
-									// eslint-disable-next-line no-mixed-spaces-and-tabs
-							  )
-							: sortedItems
-						).map((item) => (
+						{items.map((item) => (
 							<TableRow key={item.name}>
 								<TableCell component='th' scope='row'>
 									{item.name}
@@ -123,36 +102,20 @@ export default function TagsTable({ items }: { items: TagType[] }) {
 								</TableCell>
 							</TableRow>
 						))}
-						{emptyRows > 0 && (
-							<TableRow style={{ height: 53 * emptyRows }}>
-								<TableCell colSpan={6} />
-							</TableRow>
-						)}
 					</TableBody>
-					<TableFooter>
-						<TableRow>
-							<TablePagination
-								rowsPerPageOptions={[]}
-								colSpan={3}
-								count={sortedItems.length}
-								rowsPerPage={rowsPerPage}
-								page={page}
-								slotProps={{
-									select: {
-										inputProps: {
-											'aria-label': 'rows per page',
-										},
-										native: true,
-									},
-								}}
-								onPageChange={handleChangePage}
-								onRowsPerPageChange={handleChangeRowsPerPage}
-								ActionsComponent={TablePaginationActions}
-							/>
-						</TableRow>
-					</TableFooter>
 				</Table>
 			</TableContainer>
+			<div className='mt-5 mb-10 flex justify-center'>
+				<Stack spacing={2}>
+					<Pagination
+						count={Math.ceil(total / rowsPerPage)}
+						variant='outlined'
+						shape='rounded'
+						page={page}
+						onChange={(_event, newPage) => setPage(newPage)} 
+					/>
+				</Stack>
+			</div>
 		</>
 	);
 }

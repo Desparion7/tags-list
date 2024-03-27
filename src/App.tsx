@@ -1,12 +1,26 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchTags } from './utils/fetchTags';
 import TagsTable from './components/TagsTabel';
-
+import { usePaginationTags } from './context/state';
+import { useEffect } from 'react';
 function App() {
-	const { isLoading, isSuccess, isError, data } = useQuery({
-		queryKey: ['citiesWeather'],
-		queryFn: fetchTags,
+	const { page, rowsPerPage, orderOption, sortOption } = usePaginationTags();
+	const { isLoading, isSuccess, isError, data, refetch } = useQuery({
+		queryKey: ['tags'],
+		queryFn: async () => {
+			const data = await fetchTags({
+				pageSize: rowsPerPage,
+				page,
+				orderOption,
+				sortOption,
+			});
+			return data;
+		},
 	});
+
+	useEffect(() => {
+		refetch();
+		}, [page, rowsPerPage, orderOption, sortOption, refetch]);
 
 	return (
 		<div className='container mx-auto mt-5'>
@@ -14,7 +28,12 @@ function App() {
 				Tags List
 			</h1>
 			{isLoading && <div>Loading...</div>}
-			{isSuccess && <TagsTable items={data.items} />}
+			{isSuccess && (
+				<TagsTable
+					items={data?.tagsData.items}
+					total={data?.allTagsData.total}
+				/>
+			)}
 			{isError && (
 				<div className='text-red-500 font-semibold text-2xl'>
 					Sorry, something go wrong please try again later!
