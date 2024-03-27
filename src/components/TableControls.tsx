@@ -1,5 +1,5 @@
 import { ChangeEvent } from 'react';
-interface TagsTableControlsProps {
+interface TableControlsProps {
 	rowsPerPage: number;
 	orderOption: 'desc' | 'asc';
 	sortOption: 'popular' | 'activity' | 'name';
@@ -15,14 +15,14 @@ interface TagsTableControlsProps {
 		}>
 	) => void;
 }
-function TagsTableControls({
+const TableControls = ({
 	rowsPerPage,
 	orderOption,
 	sortOption,
 	handleChangeRowsPerPage,
 	handleChangeOrderOption,
 	handleChangeSortOption,
-}: TagsTableControlsProps) {
+}: TableControlsProps) => {
 	return (
 		<div className='mb-5 pt-5 flex justify-end gap-5 border-t-2'>
 			<div>
@@ -65,6 +65,6 @@ function TagsTableControls({
 			</div>
 		</div>
 	);
-}
+};
 
-export default TagsTableControls;
+export default TableControls;
