@@ -24,9 +24,9 @@ const CustomTable = ({ items }: CustomTableProps) => {
 							style={{
 								width: 160,
 								fontSize: 20,
-								backgroundColor: '#70B8E7',
 								color: 'white',
 							}}
+							className='bg-blue-500'
 						>
 							Tag
 						</TableCell>
@@ -34,9 +34,9 @@ const CustomTable = ({ items }: CustomTableProps) => {
 							style={{
 								width: 160,
 								fontSize: 20,
-								backgroundColor: '#70B8E7',
 								color: 'white',
 							}}
+							className='bg-blue-500'
 							align='right'
 							colSpan={3}
 						>
@@ -51,7 +51,6 @@ const CustomTable = ({ items }: CustomTableProps) => {
 									<TableRow key={index}>
 										<TableCell component='th' scope='row'>
 											loading...
-											
 										</TableCell>
 										<TableCell
 											style={{

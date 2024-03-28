@@ -26,7 +26,7 @@ function App() {
 
 	return (
 		<div className='container mx-auto mt-5'>
-			<h1 className='font-semibold text-3xl ml-3 mb-3 text-center'>
+			<h1 className='font-semibold text-3xl ml-3 mb-3 text-center text-blue-500'>
 				Tags List
 			</h1>
 			{isLoading && (

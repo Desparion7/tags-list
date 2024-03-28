@@ -1,5 +1,5 @@
 import { ChangeEvent } from 'react';
-interface TableControlsProps {
+type TableControlsProps = {
 	rowsPerPage: number;
 	orderOption: 'desc' | 'asc';
 	sortOption: 'popular' | 'activity' | 'name';
@@ -14,7 +14,7 @@ interface TableControlsProps {
 			value: unknown;
 		}>
 	) => void;
-}
+};
 const TableControls = ({
 	rowsPerPage,
 	orderOption,
@@ -24,9 +24,9 @@ const TableControls = ({
 	handleChangeSortOption,
 }: TableControlsProps) => {
 	return (
-		<div className='mb-5 pt-5 flex justify-end gap-5 border-t-2'>
+		<div className='mb-5 pt-5 flex flex-col items-center gap-5 border-t-2'>
 			<div>
-				<label htmlFor='rowsPerPage'>Tags per page:</label>
+				<label htmlFor='rowsPerPage'>Tags on page:</label>
 				<select
 					id='rowsPerPage'
 					value={rowsPerPage}
@@ -48,8 +48,8 @@ const TableControls = ({
 					onChange={handleChangeOrderOption}
 					className='outline-none focus-none cursor-pointer mr-1 custom-select'
 				>
-					<option value='desc'>descending</option>
-					<option value='asc'>ascending</option>
+					<option value='desc'>Descending</option>
+					<option value='asc'>Ascending</option>
 				</select>
 				<label htmlFor='sortOption'>by:</label>
 				<select
@@ -58,9 +58,9 @@ const TableControls = ({
 					onChange={handleChangeSortOption}
 					className='outline-none focus-none cursor-pointer custom-select'
 				>
-					<option value='popular'>popular</option>
-					<option value='activity'>activity</option>
-					<option value='name'>name</option>
+					<option value='popular'>Popular</option>
+					<option value='activity'>Activity</option>
+					<option value='name'>Name</option>
 				</select>
 			</div>
 		</div>
