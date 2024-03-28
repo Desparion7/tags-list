@@ -6,18 +6,19 @@ import { useEffect } from 'react';
 import LoadingSpinner from './components/LoadingSpinner';
 function App() {
 	const { page, rowsPerPage, orderOption, sortOption } = usePaginationTags();
-	const { isLoading, isSuccess, isError, data, refetch } = useQuery({
-		queryKey: ['tags'],
-		queryFn: async () => {
-			const data = await fetchTags({
-				pageSize: rowsPerPage,
-				page,
-				orderOption,
-				sortOption,
-			});
-			return data;
-		},
-	});
+	const { isLoading, isSuccess, isError, data, refetch, isFetching } =
+		useQuery({
+			queryKey: ['tags'],
+			queryFn: async () => {
+				const data = await fetchTags({
+					pageSize: rowsPerPage,
+					page,
+					orderOption,
+					sortOption,
+				});
+				return data;
+			},
+		});
 
 	useEffect(() => {
 		refetch();
@@ -37,6 +38,7 @@ function App() {
 				<TagsTable
 					items={data?.tagsData.items}
 					total={data?.allTagsData.total}
+					isFetching={isFetching}
 				/>
 			)}
 			{isError && (

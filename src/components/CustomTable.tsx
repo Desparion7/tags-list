@@ -6,12 +6,14 @@ import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import Paper from '@mui/material/Paper';
 import { TagType } from '../types/tagType';
+import { usePaginationTags } from '../context/state';
 
 type CustomTableProps = {
 	items: TagType[];
 };
 
 const CustomTable = ({ items }: CustomTableProps) => {
+	const { rowsPerPage } = usePaginationTags();
 	return (
 		<TableContainer component={Paper}>
 			<Table sx={{ minWidth: 500 }} aria-label='custom pagination table'>
@@ -43,20 +45,40 @@ const CustomTable = ({ items }: CustomTableProps) => {
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					{items.map((item) => (
-						<TableRow key={item.name}>
-							<TableCell component='th' scope='row'>
-								{item.name}
-							</TableCell>
-							<TableCell
-								style={{ width: 160 }}
-								align='right'
-								colSpan={3}
-							>
-								{item.count}
-							</TableCell>
-						</TableRow>
-					))}
+					{items.length === 0
+						? Array.from({ length: rowsPerPage }).map(
+								(_, index) => (
+									<TableRow key={index}>
+										<TableCell component='th' scope='row'>
+											loading...
+											
+										</TableCell>
+										<TableCell
+											style={{
+												width: 160,
+											}}
+											align='right'
+											colSpan={3}
+										>
+											loading...
+										</TableCell>
+									</TableRow>
+								)
+							)
+						: items.map((item) => (
+								<TableRow key={item.name}>
+									<TableCell component='th' scope='row'>
+										{item.name}
+									</TableCell>
+									<TableCell
+										style={{ width: 160 }}
+										align='right'
+										colSpan={3}
+									>
+										{item.count}
+									</TableCell>
+								</TableRow>
+							))}
 				</TableBody>
 			</Table>
 		</TableContainer>

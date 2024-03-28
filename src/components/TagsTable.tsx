@@ -8,9 +8,14 @@ import CustomPagination from './CustomPagination';
 export type TagsTablePropsType = {
 	items: TagType[];
 	total: number;
+	isFetching: boolean;
 };
 
-export default function TagsTable({ items, total }: TagsTablePropsType) {
+export default function TagsTable({
+	items,
+	total,
+	isFetching,
+}: TagsTablePropsType) {
 	const {
 		page,
 		rowsPerPage,
@@ -48,7 +53,8 @@ export default function TagsTable({ items, total }: TagsTablePropsType) {
 				sortOption={sortOption}
 				handleChangeSortOption={handleChangeSortOption}
 			/>
-			<CustomTable items={items} />
+			{!isFetching && <CustomTable items={items} />}
+			{isFetching && <CustomTable items={[]} />}
 			<CustomPagination
 				total={total}
 				rowsPerPage={rowsPerPage}
