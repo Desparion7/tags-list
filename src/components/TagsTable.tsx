@@ -53,8 +53,11 @@ export default function TagsTable({
 				sortOption={sortOption}
 				handleChangeSortOption={handleChangeSortOption}
 			/>
-			{!isFetching && <CustomTable items={items} />}
-			{isFetching && <CustomTable items={[]} />}
+			{!isFetching ? (
+				<CustomTable items={items} />
+			) : (
+				<CustomTable items={[]} />
+			)}
 			<CustomPagination
 				total={total}
 				rowsPerPage={rowsPerPage}
